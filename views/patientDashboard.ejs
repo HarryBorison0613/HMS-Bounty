@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Patient Dashboard</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
+    integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+    integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+
+<body>
+  <header id="nav-wrapper">
+    <nav id="nav">
+      <div class="nav left">
+        <span class="gradient skew">
+          <h1 class="logo un-skew"><a href="/patient">HMS</a></h1>
+        </span>
+        <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
+      </div>
+      <div class="nav right">
+        <a href="/patient" class="nav-link active"><span class="nav-link-span"><span
+              class="u-nav">Dashboard</span></span></a>
+        <a href="/patient/profile" class="nav-link"><span class="nav-link-span"><span
+              class="u-nav">Profile</span></span></a>
+        <a href="/logout" class="nav-link"><span class="nav-link-span"><span class="u-nav">Logout</span></span></a>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="p-4">
+      <div class="d-flex justify-content-between" style="margin-top: 70px;">
+        <h2>Doctor Lists</h2>
+        <div>
+          <input type="text" id="searchField" class="form-control" onchange="sortData('search')" placeholder="Search...">
+        </div>
+      </div>
+      <div class="d-flex flex-column mt-2">
+        <div class="p-3 mt-2"
+          style="width: 100%; min-width: 600px; border-radius: 8px; background-color: #79ccc2; color: white; font-size: 16px; font-weight: 500;">
+          <div class="row">
+            <div class="col-3" style="box-sizing: border-box;">Doctor Name</div>
+            <div class="col-2">
+              <button style="color: white; padding: 0 !important;" onclick="sortData('expertise')">
+                Expertise
+                <i id="expertiseSort" class="fas fa-sort"></i>
+              </button>
+            </div>
+            <div class="col-3">
+              <button style="color: white; padding: 0 !important;" onclick="sortData('location')">
+                Location
+                <i id="locationSort" class="fas fa-sort"></i>
+              </button>
+            </div>
+            <div class="col-2">Phone</div>
+            <div class="col-2">Appointment</div>
+          </div>
+        </div>
+        <div id="listPart">
+          <% if (doctors.length===0) { %>
+            <div class="p-3 mt-2 d-flex w-100 justify-content-center">No doctors yet</div>
+            <% } else { %>
+              <% doctors.forEach(function(doctor) { %>
+                <div class="p-3 mt-2"
+                  style="width: 100%; min-width: 600px; border-radius: 8px; background-color: rgb(64 66 65); color: white;">
+                  <div class="row">
+                    <div class="col-3 d-flex align-items-center">
+                      <div class="mr-2" style="border-radius: 50%; width: 40px; height: 40px; overflow: hidden;">
+                        <img src="/avatar/<%= doctor.avatar %>" style="width: 100%; height: 100%;">
+                      </div>
+                        <%= doctor.fullname %>
+                    </div>
+                    <div class="col-2 d-flex align-items-center">
+                      <%= doctor.expertise %>
+                    </div>
+                    <div class="col-3 d-flex align-items-center">
+                      <%= doctor.location %>
+                    </div>
+                    <div class="col-2 d-flex align-items-center">
+                      <%= doctor.phone %>
+                    </div>
+                    <div class="col-2 d-flex align-items-center">
+                      <button type="button" class="btn btn-sm btn-danger" data-toggle="modal"
+                        data-target="#disease<%= doctor._id %>">
+                        Set appointment
+                      </button>
+
+                      <!-- Modal -->
+                      <div class="modal fade" id="disease<%= doctor._id %>" tabindex="-1" role="dialog"
+                        aria-labelledby="disease<%= doctor._id %>" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content" style="background-color: #79ccc2;">
+                            <div class="modal-body">
+                              <label class="form-control-label">Please input available time</label>
+                              <input type="datetime-local" id="appointment<%= doctor._id %>" class="form-control">
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-success btn-sm" data-dismiss="modal"
+                                onclick="setAppointment('<%= doctor._id %>')">Submit</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% }) %>
+                  <% } %>
+        </div>
+
+      </div>
+    </div>
+    <% if (token) { %>
+      <input type="text" id="token" value="<%= token %>" hidden>
+      <% } %>
+  </main>
+
+  <script>
+    const tokenField = document.getElementById('token')
+    let token;
+    if (tokenField) {
+      token = tokenField.value
+      localStorage.setItem('hospital_token', token)
+    } else {
+      token = localStorage.getItem('hospital_token')
+    }
+    document.cookie = `token=${token}`
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+  <script src="/js/navbar.js"></script>
+  <script src="/js/patient.js"></script>
+
+</body>
+
+</html>

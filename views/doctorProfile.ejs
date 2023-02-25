@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Profile</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
+        integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+        integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/doctor.css">
+
+</head>
+
+<body>
+    <header id="nav-wrapper">
+        <nav id="nav">
+            <div class="nav left">
+                <span class="gradient skew">
+                    <h1 class="logo un-skew"><a href="/doctor">HMS</a></h1>
+                </span>
+                <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
+            </div>
+            <div class="nav right">
+                <a href="/doctor" class="nav-link"><span class="nav-link-span"><span
+                            class="u-nav">Dashboard</span></span></a>
+                <a href="/doctor/profile" class="nav-link active"><span class="nav-link-span"><span
+                            class="u-nav">Profile</span></span></a>
+                <a href="/logout" class="nav-link"><span class="nav-link-span"><span
+                            class="u-nav">Logout</span></span></a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <div class="wrapper">
+                <div class="cctabs">
+                    <input checked id="one" name="tabs" type="radio">
+                    <label for="one"><i class="fas fa-user"></i> Account</label>
+                    <input id="two" name="tabs" type="radio" value="Two">
+                    <label for="two"><i class="fas fa-unlock-alt"></i> Security</label>
+                    <input id="three" name="tabs" type="radio">
+                    <label for="three"><i class="fas fa-info-circle"></i> Info</label>
+                    <div class="panels">
+                        <div class="panel">
+                            <div class="d-flex justify-content-start align-items-center">
+                                <div class="profile_image_box" id="custom_upload">
+                                    <input type="file" id="file_input" hidden>
+                                    <img src="/avatar/<%= user.avatar %>" id="img">
+                                </div>
+                                <div class="d-flex flex-column align-items ml-4">
+                                    <div class="d-flex justify-content-start mb-4">
+                                        <button class="btn btn-success mr-4" onclick="uploadAvatar()">UPLOAD NEW PHOTO</button>
+                                        <button class="btn btn-secondary" onclick="resetAvatar('<%= user.avatar %>')">RESET</button>
+                                    </div>
+                                    <div style="font-size: 12px; color: gray;">
+                                        Allowed PNG or JPEG. Max size of 800K.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column mt-4">
+                                <label class="form-label">Name:</label>
+                                <input type="text" class="form-control mb-2" value="<%= user.fullname %>" placeholder="name" disabled>
+                                <label class="form-label">Email:</label>
+                                <input type="email" class="form-control mb-2" value="<%= user.email %>" placeholder="email" disabled>
+                                <label class="form-label">Role:</label>
+                                <input type="text" class="form-control mb-2" value="<%= user.role %>" placeholder="role" disabled>
+                                <label class="form-label">Expertise:</label>
+                                <input type="text" class="form-control mb-2" value="<%= user.expertise %>" placeholder="expertise" disabled>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="d-flex flex-column">
+                                <div class="form-group d-flex flex-column">
+                                    <label class="control-label">Current Password</label>
+                                    <div>
+                                        <input id="currentPwd" type="password" class="form-control"
+                                            placeholder="Current Password">
+                                    </div>
+                                </div>
+                                <div class="form-group d-flex flex-column">
+                                    <label class="control-label">New Password</label>
+                                    <div>
+                                        <input id="newPwd" type="password" class="form-control"
+                                            placeholder="New Password">
+                                    </div>
+                                </div>
+                                <div class="form-group d-flex flex-column">
+                                    <label class="control-label">Confirm Password</label>
+                                    <div>
+                                        <input id="confirmPwd" type="password" class="form-control"
+                                            placeholder="Confirm Password">
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-start">
+                                    <button class="btn btn-success mr-4" onclick="changePassword()">SAVE CHANGES</button>
+                                    <button class="btn btn-secondary" onclick="resetPassword()">RESET</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="row">
+                                <div class="col-sm-8 d-flex flex-column">
+                                <label class="form-label">Phone:</label>
+                                    <input type="number" id="phone" class="form-control mb-2" value="<%= user.phone %>" placeholder="phone">
+                                <label class="form-label">Gender:</label>
+                                <input type="text" class="form-control mb-2" value="<%= user.gender %>" placeholder="gender" disabled>
+                                <label class="form-label">Location:</label>
+                                <input type="text" name="location"  value="<%= user.location %>" class="form-control mb-2 places-autocomplete"
+                    id="format_address" required>
+                  <input type="text" id="user_lat" value="<%= user.latitude %>" name="latitude" hidden>
+                  <input type="text" id="user_lng" value="<%= user.longitude %>" name="longitude" hidden>
+                                    <div class="d-flex justify-content-start mt-4">
+                                        <button class="btn btn-success mr-4" onclick="profileUpdate()">SAVE CHANGES</button>
+                                        <button class="btn btn-secondary" onclick="resetProfile('<%= user.phone %>', '<%= user.location %>', '<%= user.latitude %>', '<%= user.longitude %>')">RESET</button>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div style="position: relative; width: 100%; padding-bottom: 100%;">
+                                        <div id="map" style="position: absolute; top: 0; left: 0; bottom: 0; width: 100%; height: 100%;">
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="successSnackbar">Changed password successfully</div>
+    <div id="errorSnackbar">Wrong password</div>
+    <script src="/js/profile.js"></script>
+    <script src="/js/navbar.js"></script>
+
+    <script>
+        function Map123() {
+            const latitude = document.getElementById('user_lat').value
+            const longitude = document.getElementById('user_lng').value
+            let mapOptions = {
+                center: new google.maps.LatLng(latitude, longitude),
+                zoom: 5,
+                mapTypeId: google.maps.MapTypeId.HYBRID
+            }
+            let map = new google.maps.Map(document.getElementById("map"), mapOptions);
+            let marker = new google.maps.Marker({
+                position: map.getCenter(),
+                map: map
+            })
+        }
+    </script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5-mJU8x096rUj4O9xWNv8MLXTJEHiOWc&libraries=places&callback=Map123"></script>
+<script src="/js/autocomplete.js"></script>
+</body>
+
+</html>

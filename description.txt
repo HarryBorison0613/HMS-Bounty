@@ -1,0 +1,24 @@
+This is hospital management system.
+Website has three roles - admin, doctor, patient.
+I used html, CSS, Bootstrap in frontend and used Node.js, Express.js in backend and used MongoDB as database.
+This site implemented such below functions.
+
+1. Set appointment with Date + Time by patient.
+2. Appointment list for patient (history)
+3. Doctor expertise, Google Map API
+4. Sort by doctor expertise / location + Search by doctor name / location / expertise (free search)
+5. Twitter connection like the realtor example I sent you, just change it to some medical twitter page instead of real estate.
+6. Admin functionality add/remove/update patient/doctors
+7. statistics for admin with at least 2 graphs using d3js.org (appointments per month + new patients per day)
+8. use of web service - in realtor we used Currency rate of usd and ILS. here maybe get News web service that related to medical.
+9. Use of one query which is doing Group By operation in the MongoDB.
+10. include the following HTML5 elements:
+-video
+-canvas
+-Aside, footer, header, nav, section
+11. include CSS3 elements:
+-Text-shadow
+-Transition
+-Multiple-columns
+-Font-face
+-Border-radius
